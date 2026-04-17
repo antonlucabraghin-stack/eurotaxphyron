@@ -1,164 +1,195 @@
 <!DOCTYPE html>
-
 <html lang="it">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Phyron Dashboard</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Phyron — Business Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f3; color: #1a1a1a; padding: 24px; }
+        h2 { font-size: 20px; font-weight: 500; margin-bottom: 20px; color: #1a1a1a; }
+        .section-title { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #888; margin: 0 0 10px; }
+        
+        .metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+        .metric { background: #ebebea; border-radius: 8px; padding: 12px 14px; }
+        .metric .label { font-size: 11px; color: #888; margin: 0 0 4px; }
+        .metric .value { font-size: 20px; font-weight: 600; margin: 0; line-height: 1.2; }
+        .metric .sub { font-size: 11px; color: #666; margin: 2px 0 0; }
+        
+        .badge-warn { display: inline-block; font-size: 10px; font-weight: 600; background: #FAEEDA; color: #633806; padding: 2px 6px; border-radius: 4px; margin-top: 4px; }
+        .badge-ok { display: inline-block; font-size: 10px; font-weight: 600; background: #EAF3DE; color: #27500A; padding: 2px 6px; border-radius: 4px; margin-top: 4px; }
+        
+        .two-col { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 14px; margin-bottom: 16px; }
+        .card { background: #fff; border: 0.5px solid #e0e0de; border-radius: 12px; padding: 16px 20px; }
+        
+        table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 8px; }
+        th { font-size: 10px; font-weight: 600; color: #888; text-align: left; padding: 8px 6px; border-bottom: 0.5px solid #e0e0de; text-transform: uppercase; }
+        td { padding: 8px 6px; border-bottom: 0.5px solid #f0f0ee; color: #1a1a1a; }
+        .amount { text-align: right; font-variant-numeric: tabular-nums; font-weight: 500; }
+        .total-row td { font-weight: 700; border-top: 1px solid #ccc !important; padding-top: 10px; }
+        .muted { color: #888; font-size: 11px; }
 
-<style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f3; color: #1a1a1a; padding: 24px; }
-h2 { font-size: 20px; font-weight: 500; margin-bottom: 20px; }
-.section-title { font-size: 11px; text-transform: uppercase; color: #888; margin-bottom: 10px; }
+        .scenario-box { background: #f9f9f9; border-left: 3px solid #3266ad; padding: 10px; margin-top: 10px; border-radius: 0 4px 4px 0; }
+        .scenario-title { font-size: 12px; font-weight: 700; color: #3266ad; margin-bottom: 4px; }
+        .scenario-text { font-size: 11px; color: #444; line-height: 1.4; }
 
-.metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
-.metric { background: #ebebea; border-radius: 8px; padding: 12px 14px; }
-.metric .label { font-size: 11px; color: #888; }
-.metric .value { font-size: 22px; font-weight: 500; }
-.metric .sub { font-size: 12px; color: #888; }
-
-.badge-ok { background: #EAF3DE; color: #27500A; padding: 2px 8px; border-radius: 4px; font-size: 11px; }
-.badge-warn { background: #FAEEDA; color: #633806; padding: 2px 8px; border-radius: 4px; font-size: 11px; }
-
-.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
-.card { background: #fff; border: 0.5px solid #e0e0de; border-radius: 12px; padding: 16px 20px; }
-
-.card-header { display: flex; justify-content: space-between; margin-bottom: 10px; }
-select { font-size: 12px; padding: 4px 8px; border-radius: 6px; border: 0.5px solid #ccc; }
-
-.total-label { font-size: 13px; color: #666; margin-bottom: 6px; }
-
-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-td, th { padding: 6px; border-bottom: 0.5px solid #eee; }
-.amount { text-align: right; }
-.total-row td { font-weight: 500; border-top: 0.5px solid #ccc !important; }
-
-.legend { display: flex; gap: 16px; margin-top: 10px; font-size: 12px; color: #666; }
-.legend-dot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; margin-right: 4px; }
-
-@media (max-width: 700px) {
-  .metric-grid { grid-template-columns: repeat(2,1fr); }
-  .two-col { grid-template-columns: 1fr; }
-}
-</style>
-
+        @media (max-width: 900px) { .metric-grid { grid-template-columns: repeat(2,1fr); } .two-col { grid-template-columns: 1fr; } }
+    </style>
 </head>
-
 <body>
 
 <h2>Phyron — Business Dashboard</h2>
 
-<p class="section-title">Overview</p>
-
+<p class="section-title">Performance Attuale</p>
 <div class="metric-grid">
-  <div class="metric"><p class="label">MRR attuale</p><p class="value">€2,202</p><span class="badge-ok">attivo</span></div>
-  <div class="metric"><p class="label">Proiezione annuale</p><p class="value">€26,424</p><p class="sub">MRR × 12</p></div>
-  <div class="metric"><p class="label">Forecast MRR dic. 2026</p><p class="value">€5k–8k</p></div>
-  <div class="metric"><p class="label">Proiezione annuale 2027</p><p class="value">€60k–96k</p></div>
-</div>
-
-<div class="metric-grid">
-  <div class="metric"><p class="label">Pagamenti totali inviati</p><p class="value">€7,508.98</p><p class="sub">Q2 2025 – Q1 2026</p></div>
-  <div class="metric"><p class="label">Totale pending</p><p class="value">€6,664</p><span class="badge-warn">da saldare</span></div>
-  <div class="metric"><p class="label">CR app → cliente</p><p class="value">25%</p><p class="sub">72 app · 18 clienti</p></div>
-  <div class="metric"><p class="label">AVG MRR per cliente</p><p class="value">€1,036</p></div>
-</div>
-
-<div class="two-col">
-  <div class="card">
-    <div class="card-header">
-      <p class="section-title">Pagamenti per trimestre</p>
-      <div>
-        <select id="filterYear">
-          <option value="all">Tutti</option>
-          <option value="2025">2025</option>
-          <option value="2026">2026</option>
-        </select>
-        <select id="filterQ">
-          <option value="all">Tutti</option>
-          <option value="Q1">Q1</option>
-          <option value="Q2">Q2</option>
-          <option value="Q3">Q3</option>
-          <option value="Q4">Q4</option>
-        </select>
-      </div>
+    <div class="metric">
+        <p class="label">MRR Attuale</p>
+        <p class="value">€2.202,00</p>
+        <span class="badge-ok">ABBONAMENTI ATTIVI</span>
     </div>
-    <p class="total-label" id="paymentsTotal"></p>
-    <div style="height:180px;"><canvas id="paymentsChart"></canvas></div>
-  </div>
+    <div class="metric">
+        <p class="label">Proiezione Annuale</p>
+        <p class="value">€26.424,00</p>
+        <p class="sub">Su base MRR attuale</p>
+    </div>
+    <div class="metric">
+        <p class="label">Totale Generato</p>
+        <p class="value">€14.173,63</p>
+        <p class="sub">Valore complessivo</p>
+    </div>
+    <div class="metric">
+        <p class="label">Totale Clienti</p>
+        <p class="value">18</p>
+        <p class="sub">15 Old + 3 New (est.)</p>
+    </div>
+</div>
 
-  <div class="card">
-    <p class="section-title">MRR per cliente</p>
-    <div style="height:400px;"><canvas id="mrrChart"></canvas></div>
-  </div>
+<div class="metric-grid" style="margin-top: -6px;">
+    <div class="metric">
+        <p class="label">Totale Incassato (2025-26)</p>
+        <p class="value">€7.508,98</p>
+        <p class="sub">4 Statement inviati</p>
+    </div>
+    <div class="metric">
+        <p class="label">Pending da Incassare</p>
+        <p class="value">€6.664,65</p>
+        <span class="badge-warn">ATTESA SALDO CLIENTE</span>
+    </div>
+    <div class="metric">
+        <p class="label">Forecast MRR Dic '26</p>
+        <p class="value">€5k – €8k</p>
+        <p class="sub">Target Fine Anno</p>
+    </div>
+    <div class="metric">
+        <p class="label">Proiezione 2027</p>
+        <p class="value">€60k – €96k</p>
+        <p class="sub">Target Annuale</p>
+    </div>
 </div>
 
 <div class="two-col">
-  <div class="card">
-    <p class="section-title">Pagamenti pending</p>
-    <table>
-      <tr><th>Cliente</th><th class="amount">€</th></tr>
-      <tr><td>Autosalone</td><td class="amount">€2,200</td></tr>
-      <tr><td>Jolly</td><td class="amount">€1,800</td></tr>
-      <tr><td>Autoalpina</td><td class="amount">€2,664</td></tr>
-    </table>
-  </div>
+    <div class="card">
+        <p class="section-title">Dettaglio Pagamenti Pending (Saldo Eurotax 15%)</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Stato / Data</th>
+                    <th class="amount">Tot. Cliente</th>
+                    <th class="amount">Spetta Eurotax (15%)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Autosalone Internazionale</td><td class="muted">2026-03-01 unpaid</td><td class="amount">€3.390,00</td><td class="amount">€508,50</td></tr>
+                <tr><td>Autoalpina/Sicav</td><td class="muted">2025-07-01 unpaid</td><td class="amount">€1.415,00</td><td class="amount">€212,25</td></tr>
+                <tr><td>Autoalpina/Sicav</td><td class="muted">2026-01-01 unpaid</td><td class="amount">€1.415,00</td><td class="amount">€212,25</td></tr>
+                <tr><td>Jolly</td><td class="muted">2025-07-20 unpaid</td><td class="amount">€10.353,00</td><td class="amount">€1.552,95</td></tr>
+                <tr><td>Stefauto/Cisa 200</td><td class="muted">2025-09-01 unpaid</td><td class="amount">€12.600,00</td><td class="amount">€1.890,00</td></tr>
+                <tr><td>Autobase</td><td class="muted">2025-09-01 unpaid</td><td class="amount">€7.191,00</td><td class="amount">€1.078,65</td></tr>
+                <tr><td>Authos S.P.A</td><td class="muted">2026-02-04 unpaid</td><td class="amount">€4.858,00</td><td class="amount">€728,70</td></tr>
+                <tr><td>Castiglioni</td><td class="muted">2026-06-23</td><td class="amount">€3.209,00</td><td class="amount">€481,35</td></tr>
+                <tr class="total-row">
+                    <td colspan="3">TOTALE PENDING EUROTAX</td>
+                    <td class="amount">€6.664,65</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-  <div class="card">
-    <p class="section-title">Funnel</p>
-    <div style="height:220px;"><canvas id="funnelChart"></canvas></div>
-  </div>
+    <div class="card">
+        <p class="section-title">Sales Funnel & Conversioni</p>
+        <div style="height: 180px;"><canvas id="funnelChart"></canvas></div>
+        <div style="margin-top: 20px;">
+            <p class="section-title">Scenari di Crescita (Dic 2026)</p>
+            <div class="scenario-box">
+                <p class="scenario-title">Scenario A: Crescita Organica</p>
+                <p class="scenario-text">+2 nuovi clienti/mese. Totale +18 nuovi clienti (Apr-Dic). MRR stimato: <strong>€5.000 - €5.500</strong>.</p>
+            </div>
+            <div class="scenario-box" style="border-left-color: #27500A;">
+                <p class="scenario-title" style="color: #27500A;">Scenario B: Conversione Pending & Scalata</p>
+                <p class="scenario-text">Conversione 47 proposte al 23% (+11 clienti immediati). MRR stimato: <strong>€7.500 - €8.000</strong>.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <p class="section-title">Composizione MRR per Cliente (Totale: €14.680 complessivi rilevati)</p>
+    <div style="height: 350px;"><canvas id="mrrBarChart"></canvas></div>
 </div>
 
 <script>
+    const ctxFunnel = document.getElementById('funnelChart').getContext('2d');
+    new Chart(ctxFunnel, {
+        type: 'bar',
+        data: {
+            labels: ['Contatti', 'App', 'Proposte', 'Clienti'],
+            datasets: [{
+                label: 'Volume',
+                data: [110, 72, 47, 18],
+                backgroundColor: ['#3266ad', '#5DA3E0', '#8FC5EE', '#B8D9F4'],
+                borderRadius: 5
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { x: { display: false }, y: { grid: { display: false } } }
+        }
+    });
 
-const payments = [
-  { label:'Q2 2025',year:'2025',q:'Q2',val:2184.75 },
-  { label:'Q3 2025',year:'2025',q:'Q3',val:983.24 },
-  { label:'Q4 2025',year:'2025',q:'Q4',val:4340.99 },
-  { label:'Q1 2026',year:'2026',q:'Q1',val:3438.90 }
-];
+    const ctxMrr = document.getElementById('mrrBarChart').getContext('2d');
+    const mrrData = {
+        "Authos": 1665, "City motors": 1580, "Cisa": 1400, "Jolly": 1150, "Ghedini": 900,
+        "Autosalone": 847, "Car lovers": 828, "Seven Car": 820, "Base": 800, "VW Zentrum": 750,
+        "Arona": 630, "Rolandi": 610, "Autosalone 2": 565, "Castiglioni": 535, "Carsoon": 500,
+        "Autoalpina": 440, "Fuj": 370, "Autostile": 290
+    };
 
-const chart = new Chart(document.getElementById('paymentsChart'), {
-  type:'bar',
-  data:{ labels:[], datasets:[{ data:[], backgroundColor:'#3266ad' }] },
-  options:{ plugins:{legend:{display:false}} }
-});
-
-function update(){
-  const y=filterYear.value,q=filterQ.value;
-  const f=payments.filter(p=>(y==='all'||p.year===y)&&(q==='all'||p.q===q));
-  chart.data.labels=f.map(x=>x.label);
-  chart.data.datasets[0].data=f.map(x=>x.val);
-  chart.update();
-  const tot=f.reduce((a,b)=>a+b.val,0);
-  paymentsTotal.innerText=f.length?'Totale €'+tot.toFixed(2):'Nessun dato';
-}
-
-filterYear.onchange=update;
-filterQ.onchange=update;
-update();
-
-new Chart(document.getElementById('mrrChart'),{
-  type:'bar',
-  data:{
-    labels:['Top client','Client 2','Client 3','Client 4'],
-    datasets:[{ data:[1665,1500,1400,1200], backgroundColor:'#5DA3E0' }]
-  },
-  options:{ indexAxis:'y', plugins:{legend:{display:false}} }
-});
-
-new Chart(document.getElementById('funnelChart'),{
-  type:'bar',
-  data:{
-    labels:['Contatti','App','Proposals','Clienti'],
-    datasets:[{ data:[110,72,47,18], backgroundColor:['#3266ad','#5DA3E0','#8FC5EE','#B8D9F4'] }]
-  },
-  options:{ plugins:{legend:{display:false}} }
-});
-
+    new Chart(ctxMrr, {
+        type: 'bar',
+        data: {
+            labels: Object.keys(mrrData),
+            datasets: [{
+                label: 'MRR in €',
+                data: Object.values(mrrData),
+                backgroundColor: '#3266ad',
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { beginAtZero: true, grid: { color: '#f0f0f0' } },
+                x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+            }
+        }
+    });
 </script>
 
 </body>
