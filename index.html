@@ -46,12 +46,12 @@
 <div class="metric-grid">
     <div class="metric">
         <p class="label">MRR=Importo mensile ricorrente che spetta a Eurotax</p>
-        <p class="value">€2.389,05</p>
+        <p class="value">€2.478,30</p>
         <span class="badge-ok">ABBONAMENTI ATTIVI</span>
     </div>
     <div class="metric">
         <p class="label">Proiezione Annuale</p>
-        <p class="value">€28.668,60</p>
+        <p class="value">€29.739,60</p>
         <p class="sub">Su base MRR attuale</p>
     </div>
     <div class="metric">
@@ -61,8 +61,8 @@
     </div>
     <div class="metric">
         <p class="label">Totale Clienti</p>
-        <p class="value">18</p>
-        <p class="sub">3 Old + 17 New (dato CSV)</p>
+        <p class="value">21</p>
+        <p class="sub">3 Old + 18 New</p>
     </div>
 </div>
 
@@ -92,12 +92,12 @@
 <div class="metric-grid" style="margin-top: -6px;">
     <div class="metric">
         <p class="label">CR App → Cliente</p>
-        <p class="value">20,45%</p>
+        <p class="value">23,86%</p>
         <p class="sub">Tasso di conversione</p>
     </div>
     <div class="metric">
         <p class="label">AVG MRR per Cliente</p>
-        <p class="value">€1.276,94</p>
+        <p class="value">€1.094,52</p>
         <p class="sub">Valore medio abbonamento</p>
     </div>
 </div>
@@ -144,14 +144,14 @@
             </div>
             <div class="scenario-box" style="border-left-color: #27500A;">
                 <p class="scenario-title" style="color: #27500A;">Scenario B: Conversione Pending & Scalata</p>
-                <p class="scenario-text">Conversione 49 proposte al 20,45% (+11 clienti immediati). MRR stimato: <strong>€7.500 - €8.000</strong>.</p>
+                <p class="scenario-text">Conversione 49 proposte al 23,86% (+11 clienti immediati). MRR stimato: <strong>€7.500 - €8.000</strong>.</p>
             </div>
         </div>
     </div>
 </div>
 
 <div class="card">
-    <p class="section-title">Composizione MRR per Cliente (Totale: €15.927,00 complessivi rilevati)</p>
+    <p class="section-title">Composizione MRR per Cliente (Totale: €16.522,00 complessivi rilevati)</p>
     <div style="height: 350px;"><canvas id="mrrBarChart"></canvas></div>
 </div>
 
@@ -163,7 +163,7 @@
             labels: ['Contatti', 'App', 'Proposte', 'Clienti'],
             datasets: [{
                 label: 'Volume',
-                data: [125, 88, 49, 18],
+                data: [125, 88, 49, 21],
                 backgroundColor: ['#3266ad', '#5DA3E0', '#8FC5EE', '#B8D9F4'],
                 borderRadius: 5
             }]
@@ -182,7 +182,7 @@
         "Authos": 1665, "City motors": 1580, "Cisa": 1400, "Jolly": 1150, "Ghedini": 900,
         "Base": 800, "Car lovers": 828, "Carvillage": 822, "Seven Car": 820, "Autosalone": 847,
         "VW Zentrum Bari": 750, "Arona": 630, "Rolandi": 610, "Autosalone 2": 565, "Castiglioni": 535,
-        "Carsoon": 500, "L'automobile": 425, "Autoalpina": 440, "Fuji": 370, "Autostile": 290
+        "Carsoon": 500, "L'automobile": 425, "Autoalpina": 440, "Fuji": 370, "Autostile": 290, "RPG": 595
     };
 
     new Chart(ctxMrr, {
