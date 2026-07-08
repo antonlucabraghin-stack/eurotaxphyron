@@ -35,6 +35,10 @@
         .scenario-title { font-size: 12px; font-weight: 700; color: #3266ad; margin-bottom: 4px; }
         .scenario-text { font-size: 11px; color: #444; line-height: 1.4; }
 
+        .filter-select { border: 1px solid #ddd; border-radius: 20px; padding: 7px 14px; font-size: 12px; color: #333; background: #fff; cursor: pointer; font-family: inherit; }
+        .filter-select:focus { outline: none; border-color: #3266ad; }
+        .legend-dot { width: 10px; height: 10px; border-radius: 50%; background: #3266ad; display: inline-block; }
+
         @media (max-width: 900px) { .metric-grid { grid-template-columns: repeat(2,1fr); } .two-col { grid-template-columns: 1fr; } }
     </style>
 </head>
@@ -154,6 +158,152 @@
     <p class="section-title">Composizione MRR per Cliente (Totale: €16.522,00 complessivi rilevati)</p>
     <div style="height: 350px;"><canvas id="mrrBarChart"></canvas></div>
 </div>
+
+<div class="card" id="paymentsCard">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px;">
+        <div>
+            <p class="section-title" style="margin-bottom: 4px;">Pagamenti per Trimestre</p>
+            <p id="paymentsTotalLabel" style="font-size: 13px; color: #555;">Totale: €14.697,87</p>
+        </div>
+        <div style="display: flex; gap: 8px;">
+            <select id="yearFilter" class="filter-select">
+                <option value="all">Tutti gli anni</option>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+            </select>
+            <select id="quarterFilter" class="filter-select">
+                <option value="all">Tutti i trimestri</option>
+                <option value="Q1">Q1</option>
+                <option value="Q2">Q2</option>
+                <option value="Q3">Q3</option>
+                <option value="Q4">Q4</option>
+            </select>
+        </div>
+    </div>
+
+    <div style="height: 260px; margin-top: 16px;"><canvas id="paymentsChart"></canvas></div>
+
+    <div style="display: flex; align-items: center; gap: 6px; margin-top: 10px;">
+        <span class="legend-dot"></span>
+        <span class="muted">Incassato</span>
+    </div>
+
+    <p class="section-title" style="margin-top: 24px;">Dettaglio Statement</p>
+    <table>
+        <thead>
+            <tr><th>Anno</th><th>Trimestre</th><th>Statement</th><th class="amount">Importo</th></tr>
+        </thead>
+        <tbody id="statementsTableBody"></tbody>
+    </table>
+
+    <p class="section-title" style="margin-top: 24px;">Totali per Anno</p>
+    <table>
+        <thead>
+            <tr><th>Anno</th><th class="amount">Totale Incassato</th></tr>
+        </thead>
+        <tbody id="yearlyTableBody"></tbody>
+        <tfoot>
+            <tr class="total-row"><td>TOTALE COMPLESSIVO</td><td class="amount" id="grandTotalCell">€14.697,87</td></tr>
+        </tfoot>
+    </table>
+</div>
+
+<script>
+    // ---- Pagamenti per Trimestre ----
+    const paymentsData = [
+        { year: 2025, quarter: 'Q2', statement: 'Statement 1', amount: 2184.75 },
+        { year: 2025, quarter: 'Q3', statement: 'Statement 2', amount: 983.24 },
+        { year: 2025, quarter: 'Q4', statement: 'Statement 3', amount: 4340.99 },
+        { year: 2026, quarter: 'Q1', statement: 'Statement 4', amount: 3438.90 },
+        { year: 2026, quarter: 'Q2', statement: 'Statement 5', amount: 3749.99 }
+    ];
+
+    function formatEuro(value) {
+        return '€' + value.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    let paymentsChartInstance = null;
+
+    function renderPayments() {
+        const year = document.getElementById('yearFilter').value;
+        const quarter = document.getElementById('quarterFilter').value;
+
+        const filtered = paymentsData.filter(p =>
+            (year === 'all' || String(p.year) === year) &&
+            (quarter === 'all' || p.quarter === quarter)
+        ).sort((a, b) => (a.year - b.year) || a.quarter.localeCompare(b.quarter));
+
+        // Group by quarter for the chart
+        const grouped = {};
+        filtered.forEach(p => {
+            const key = p.quarter + ' ' + p.year;
+            grouped[key] = (grouped[key] || 0) + p.amount;
+        });
+        const order = Object.keys(grouped).sort((a, b) => {
+            const [qa, ya] = a.split(' ');
+            const [qb, yb] = b.split(' ');
+            if (ya !== yb) return ya - yb;
+            return qa.localeCompare(qb);
+        });
+        const labels = order;
+        const chartData = order.map(k => grouped[k]);
+        const total = filtered.reduce((s, p) => s + p.amount, 0);
+
+        document.getElementById('paymentsTotalLabel').innerText = 'Totale: ' + formatEuro(total);
+
+        if (paymentsChartInstance) paymentsChartInstance.destroy();
+        const ctx = document.getElementById('paymentsChart').getContext('2d');
+        paymentsChartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{ label: 'Incassato', data: chartData, backgroundColor: '#3266ad', borderRadius: 6, maxBarThickness: 90 }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#e5e5e5', borderDash: [4, 4] },
+                        ticks: { callback: v => '€' + (v / 1000) + 'k', font: { size: 11 } }
+                    },
+                    x: { grid: { display: false }, ticks: { font: { size: 11 } } }
+                }
+            }
+        });
+
+        // Statements table
+        const tbody = document.getElementById('statementsTableBody');
+        tbody.innerHTML = '';
+        filtered.forEach(p => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${p.year}</td><td>${p.quarter}</td><td>${p.statement}</td><td class="amount">${formatEuro(p.amount)}</td>`;
+            tbody.appendChild(tr);
+        });
+        if (filtered.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" class="muted">Nessun dato per il filtro selezionato</td></tr>';
+        }
+
+        // Yearly totals
+        const yearly = {};
+        filtered.forEach(p => { yearly[p.year] = (yearly[p.year] || 0) + p.amount; });
+        const yearlyBody = document.getElementById('yearlyTableBody');
+        yearlyBody.innerHTML = '';
+        Object.keys(yearly).sort().forEach(y => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${y}</td><td class="amount">${formatEuro(yearly[y])}</td>`;
+            yearlyBody.appendChild(tr);
+        });
+
+        document.getElementById('grandTotalCell').innerText = formatEuro(total);
+    }
+
+    document.getElementById('yearFilter').addEventListener('change', renderPayments);
+    document.getElementById('quarterFilter').addEventListener('change', renderPayments);
+    renderPayments();
+</script>
 
 <script>
     const ctxFunnel = document.getElementById('funnelChart').getContext('2d');
