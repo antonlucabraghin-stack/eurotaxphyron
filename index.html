@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -50,35 +49,35 @@
 <div class="metric-grid">
     <div class="metric">
         <p class="label">MRR=Importo mensile ricorrente che spetta a Eurotax</p>
-        <p class="value">€2.478,30</p>
+        <p class="value">€2.574,30</p>
         <span class="badge-ok">ABBONAMENTI ATTIVI</span>
     </div>
     <div class="metric">
         <p class="label">Proiezione Annuale</p>
-        <p class="value">€29.739,60</p>
+        <p class="value">€30.891,60</p>
         <p class="sub">Su base MRR attuale</p>
     </div>
     <div class="metric">
         <p class="label">Totale Generato</p>
-        <p class="value">€22.984,92</p>
+        <p class="value">€26.604,92</p>
         <p class="sub">Valore complessivo</p>
     </div>
     <div class="metric">
         <p class="label">Totale Clienti</p>
-        <p class="value">21</p>
-        <p class="sub">3 Old + 18 New</p>
+        <p class="value">23</p>
+        <p class="sub">3 Old + 20 New</p>
     </div>
 </div>
 
 <div class="metric-grid" style="margin-top: -6px;">
     <div class="metric">
         <p class="label">Totale Saldato (2025-26)</p>
-        <p class="value">€14.697,87</p>
-        <p class="sub">5 Statement inviati</p>
+        <p class="value">€18.029,87</p>
+        <p class="sub">6 Statement inviati</p>
     </div>
     <div class="metric">
         <p class="label">Pending da Saldare</p>
-        <p class="value">€8.287,05</p>
+        <p class="value">€8.575,05</p>
         <span class="badge-warn">ATTESA SALDO CLIENTE</span>
     </div>
     <div class="metric">
@@ -96,12 +95,12 @@
 <div class="metric-grid" style="margin-top: -6px;">
     <div class="metric">
         <p class="label">CR App → Cliente</p>
-        <p class="value">23,86%</p>
+        <p class="value">23,71%</p>
         <p class="sub">Tasso di conversione</p>
     </div>
     <div class="metric">
         <p class="label">AVG MRR per Cliente</p>
-        <p class="value">€1.094,52</p>
+        <p class="value">€1.156,74</p>
         <p class="sub">Valore medio abbonamento</p>
     </div>
 </div>
@@ -127,11 +126,11 @@
                 <tr><td>Stefauto / Cisa 2000</td><td class="muted">In attesa di saldo</td><td class="amount">€12.600,00</td><td class="amount">€1.890,00</td></tr>
                 <tr><td>Autobase</td><td class="muted">In attesa di saldo</td><td class="amount">€9.588,00</td><td class="amount">€1.438,20</td></tr>
                 <tr><td>Ghedini</td><td class="muted">In attesa di saldo</td><td class="amount">€2.020,00</td><td class="amount">€303,00</td></tr>
-                <tr><td>Citymotors</td><td class="muted">In attesa di saldo</td><td class="amount">€3.840,00</td><td class="amount">€576,00</td></tr>
+                <tr><td>Citymotors</td><td class="muted">In attesa di saldo</td><td class="amount">€5.760,00</td><td class="amount">€864,00</td></tr>
                 <tr><td>Autoarona</td><td class="muted">In attesa di saldo</td><td class="amount">€3.966,00</td><td class="amount">€594,90</td></tr>
                 <tr class="total-row">
                     <td colspan="3">TOTALE PENDING EUROTAX</td>
-                    <td class="amount">€8.287,05</td>
+                    <td class="amount">€8.575,05</td>
                 </tr>
             </tbody>
         </table>
@@ -148,14 +147,14 @@
             </div>
             <div class="scenario-box" style="border-left-color: #27500A;">
                 <p class="scenario-title" style="color: #27500A;">Scenario B: Conversione Pending & Scalata</p>
-                <p class="scenario-text">Conversione 49 proposte al 23,86% (+11 clienti immediati). MRR stimato: <strong>€7.500 - €8.000</strong>.</p>
+                <p class="scenario-text">Conversione 50 proposte al 23,71% (+12 clienti immediati). MRR stimato: <strong>€7.500 - €8.000</strong>.</p>
             </div>
         </div>
     </div>
 </div>
 
 <div class="card">
-    <p class="section-title">Composizione MRR per Cliente (Totale: €16.522,00 complessivi rilevati)</p>
+    <p class="section-title">Composizione MRR per Cliente (Totale: €17.162,00 complessivi rilevati)</p>
     <div style="height: 350px;"><canvas id="mrrBarChart"></canvas></div>
 </div>
 
@@ -163,7 +162,7 @@
     <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px;">
         <div>
             <p class="section-title" style="margin-bottom: 4px;">Pagamenti per Trimestre</p>
-            <p id="paymentsTotalLabel" style="font-size: 13px; color: #555;">Totale: €14.697,87</p>
+            <p id="paymentsTotalLabel" style="font-size: 13px; color: #555;">Totale: €18.029,87</p>
         </div>
         <div style="display: flex; gap: 8px;">
             <select id="yearFilter" class="filter-select">
@@ -203,7 +202,7 @@
         </thead>
         <tbody id="yearlyTableBody"></tbody>
         <tfoot>
-            <tr class="total-row"><td>TOTALE COMPLESSIVO</td><td class="amount" id="grandTotalCell">€14.697,87</td></tr>
+            <tr class="total-row"><td>TOTALE COMPLESSIVO</td><td class="amount" id="grandTotalCell">€18.029,87</td></tr>
         </tfoot>
     </table>
 </div>
@@ -215,7 +214,8 @@
         { year: 2025, quarter: 'Q3', statement: 'Statement 2', amount: 983.24 },
         { year: 2025, quarter: 'Q4', statement: 'Statement 3', amount: 4340.99 },
         { year: 2026, quarter: 'Q1', statement: 'Statement 4', amount: 3438.90 },
-        { year: 2026, quarter: 'Q2', statement: 'Statement 5', amount: 3749.99 }
+        { year: 2026, quarter: 'Q2', statement: 'Statement 5', amount: 3749.99 },
+        { year: 2026, quarter: 'Q3', statement: 'Statement 6', amount: 3332.00 }
     ];
 
     function formatEuro(value) {
@@ -233,7 +233,6 @@
             (quarter === 'all' || p.quarter === quarter)
         ).sort((a, b) => (a.year - b.year) || a.quarter.localeCompare(b.quarter));
 
-        // Group by quarter for the chart
         const grouped = {};
         filtered.forEach(p => {
             const key = p.quarter + ' ' + p.year;
@@ -274,7 +273,6 @@
             }
         });
 
-        // Statements table
         const tbody = document.getElementById('statementsTableBody');
         tbody.innerHTML = '';
         filtered.forEach(p => {
@@ -286,7 +284,6 @@
             tbody.innerHTML = '<tr><td colspan="4" class="muted">Nessun dato per il filtro selezionato</td></tr>';
         }
 
-        // Yearly totals
         const yearly = {};
         filtered.forEach(p => { yearly[p.year] = (yearly[p.year] || 0) + p.amount; });
         const yearlyBody = document.getElementById('yearlyTableBody');
@@ -313,7 +310,7 @@
             labels: ['Contatti', 'App', 'Proposte', 'Clienti'],
             datasets: [{
                 label: 'Volume',
-                data: [125, 88, 49, 21],
+                data: [165, 97, 50, 23],
                 backgroundColor: ['#3266ad', '#5DA3E0', '#8FC5EE', '#B8D9F4'],
                 borderRadius: 5
             }]
@@ -332,7 +329,8 @@
         "Authos": 1665, "City motors": 1580, "Cisa": 1400, "Jolly": 1150, "Ghedini": 900,
         "Base": 800, "Car lovers": 828, "Carvillage": 822, "Seven Car": 820, "Autosalone": 847,
         "VW Zentrum Bari": 750, "Arona": 630, "Rolandi": 610, "Autosalone 2": 565, "Castiglioni": 535,
-        "Carsoon": 500, "L'automobile": 425, "Autoalpina": 440, "Fuji": 370, "Autostile": 290, "RPG": 595
+        "Carsoon": 500, "L'automobile": 425, "Autoalpina": 440, "Fuji": 370, "Autostile": 290, "RPG": 595,
+        "Uniquyeb": 250, "Ferri": 390
     };
 
     new Chart(ctxMrr, {
